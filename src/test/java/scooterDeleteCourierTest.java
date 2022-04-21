@@ -35,9 +35,9 @@ public class scooterDeleteCourierTest {
         Response response =  courierClient.create(courier);
 
         Response responseDelete = courierClient.deleteS(courier);
-        responseDelete.then().assertThat().body("ok", equalTo(true)).
-                and()
-                .statusCode(200);
+        responseDelete.then().assertThat().statusCode(200)
+                .and()
+                .body("ok", equalTo(true));
     }
 
     //2тест
@@ -50,9 +50,9 @@ public class scooterDeleteCourierTest {
         // удаление созданного курьера
         Response responseDelete = courierClient.deleteWithoutId();
 
-        responseDelete.then().assertThat().body("message", equalTo("Not Found.")).
-                and()
-                .statusCode(404);
+        responseDelete.then().assertThat().statusCode(404)
+                .and()
+                .body("message", equalTo("Not Found."));
 
     }
 
@@ -70,9 +70,9 @@ public class scooterDeleteCourierTest {
 
         Response responseDelete = courierClient.deleteWithUncorrectId(courierId);
 
-        responseDelete.then().assertThat().body("message", equalTo("Курьера с таким id нет.")).
-                and()
-                .statusCode(404);
+        responseDelete.then().assertThat().statusCode(404)
+                .and()
+                .body("message", equalTo("Курьера с таким id нет."));
 
     }
 

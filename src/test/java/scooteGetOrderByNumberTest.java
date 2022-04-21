@@ -45,9 +45,9 @@ public class scooteGetOrderByNumberTest {
 
         // по номеру трека получаем номер заказа
         Response responseFourth= orderClient.getOrderNumber(orderTrack);
-        responseFourth.then().assertThat().body("order", notNullValue())
+        responseFourth.then().assertThat().statusCode(200)
                 .and()
-                .statusCode(200);
+                .body("order", notNullValue());
 
     }
 
@@ -63,9 +63,9 @@ public class scooteGetOrderByNumberTest {
 
         Response responseFourth = orderClient.getOrderNumberWithoutTrackNumber();
 
-        responseFourth.then().assertThat().body("message", equalTo("Недостаточно данных для поиска"))
+        responseFourth.then().assertThat().statusCode(400)
                 .and()
-                .statusCode(400);
+                .body("message", equalTo("Недостаточно данных для поиска"));
 
     }
 
@@ -81,9 +81,9 @@ public class scooteGetOrderByNumberTest {
 
         // по номеру трека получаем номер заказа
         Response responseFourth = orderClient.getOrderNumber(orderTrack);
-        responseFourth.then().assertThat().body("message", equalTo("Заказ не найден"))
+        responseFourth.then().assertThat().statusCode(404)
                 .and()
-                .statusCode(404);
+                .body("message", equalTo("Заказ не найден"));
 
     }
 

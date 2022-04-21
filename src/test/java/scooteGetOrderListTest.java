@@ -70,9 +70,9 @@ public class scooteGetOrderListTest {
         //получаем список заказов
 
         Response responseSixth =  orderClient.getOrderList(courierId);
-        responseSixth.then().assertThat().body("orders", notNullValue())
-                        .and()
-        .statusCode(200);
+        responseSixth.then().assertThat().statusCode(200)
+                .and()
+                .body("orders", notNullValue());
 
     }
 

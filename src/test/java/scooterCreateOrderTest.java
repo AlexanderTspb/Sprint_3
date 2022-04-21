@@ -29,9 +29,9 @@ public class scooterCreateOrderTest {
                 "Saske, come back to Konoha",new String[]{"BLACK"});
 
         Response response = orderClient.create(order);
-        response.then().assertThat().body("track", notNullValue())
-                        .and()
-        .statusCode(201);
+        response.then().assertThat().statusCode(201)
+                .and()
+                .body("track", notNullValue());
 
     }
 

@@ -38,9 +38,9 @@ public class scooterRegisterCourierTest {
 
         // отправляем запрос на регистрацию курьера и сохраняем ответ в переменную response класса Response
         Response response =  courierClient.create(courier);
-        response.then().assertThat().body("ok",equalTo(true))
-                        .and()
-        .statusCode(201);
+        response.then().assertThat().statusCode(201)
+            .and()
+            .body("ok",equalTo(true));
         courierClient.deleteS(courier);
     }
 
@@ -56,9 +56,9 @@ public class scooterRegisterCourierTest {
         // отправляем запрос на регистрацию курьера и сохраняем ответ в переменную response класса Response
         Response response =  courierClient.create(courier);
         Response responseSecond =  courierClient.create(courier);
-        responseSecond.then().assertThat().body("message",equalTo("Этот логин уже используется. Попробуйте другой."))
+        responseSecond.then().assertThat().statusCode(409)
                 .and()
-                .statusCode(409);
+                .body("message",equalTo("Этот логин уже используется. Попробуйте другой."));
         courierClient.deleteS(courier);
 
     }
@@ -71,9 +71,9 @@ public class scooterRegisterCourierTest {
     public void registerCourierWithoutFirstNameTest(){
 
         Response response = courierClient.createCourierWithoutFirstName();
-        response.then().assertThat().body("ok",equalTo(true))
+        response.then().assertThat().statusCode(201)
                 .and()
-                .statusCode(201);
+                .body("ok",equalTo(true));
 
     }
 
@@ -85,9 +85,9 @@ public class scooterRegisterCourierTest {
     public void registerCourierWithoutLoginTest(){
 
         Response response = courierClient.createCourierWithoutLogin();
-        response.then().assertThat().body("message",equalTo("Недостаточно данных для создания учетной записи"))
+        response.then().assertThat().statusCode(400)
                 .and()
-                .statusCode(400);
+                .body("message",equalTo("Недостаточно данных для создания учетной записи"));
 
     }
 
@@ -99,9 +99,9 @@ public class scooterRegisterCourierTest {
     public void registerCourierWithoutPasswordTest(){
 
         Response response = courierClient.createCourierWithoutPassword();
-        response.then().assertThat().body("message",equalTo("Недостаточно данных для создания учетной записи"))
+        response.then().assertThat().statusCode(400)
                 .and()
-                .statusCode(400);
+                .body("message",equalTo("Недостаточно данных для создания учетной записи"));
 
     }
 

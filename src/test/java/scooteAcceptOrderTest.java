@@ -64,9 +64,9 @@ public class scooteAcceptOrderTest {
 
         //принимаем заказ
         Response responseFiveth =  orderClient.acceptOrder(courierId,orderId);
-        responseFiveth.then().assertThat().body("ok",equalTo(true))
+        responseFiveth.then().assertThat().statusCode(200)
                 .and()
-                .statusCode(200);
+                .body("ok",equalTo(true));
 
     }
 
@@ -95,9 +95,9 @@ public class scooteAcceptOrderTest {
         //принимаем заказ
         Response responseFiveth = orderClient.acceptOrderWithoutCourierId(orderId);
 
-        responseFiveth.then().assertThat().body("message",equalTo("Недостаточно данных для поиска"))
+        responseFiveth.then().assertThat().statusCode(400)
                 .and()
-                .statusCode(400);
+                .body("message",equalTo("Недостаточно данных для поиска"));
 
     }
 
@@ -118,9 +118,9 @@ public class scooteAcceptOrderTest {
 
         Response responseFiveth = orderClient.acceptOrderWithoutOrderId(courierId);
 
-        responseFiveth.then().assertThat().body("message",equalTo("Недостаточно данных для поиска"))
+        responseFiveth.then().assertThat().statusCode(400)
                 .and()
-                .statusCode(400);
+                .body("message",equalTo("Недостаточно данных для поиска"));
 
 
     }
@@ -152,9 +152,9 @@ public class scooteAcceptOrderTest {
         //принимаем заказ
         Response responseFiveth =  orderClient.acceptOrder(courierId,orderId);
 
-        responseFiveth.then().assertThat().body("message",equalTo("Курьера с таким id не существует"))
+        responseFiveth.then().assertThat().statusCode(404)
                 .and()
-                .statusCode(404);
+                .body("message",equalTo("Курьера с таким id не существует"));
 
     }
 
@@ -172,9 +172,9 @@ public class scooteAcceptOrderTest {
         int orderId = RandomUtils.nextInt(1111111111,2000000000);
         //принимаем заказ
         Response responseFiveth =  orderClient.acceptOrder(courierId,orderId);
-        responseFiveth.then().assertThat().body("message",equalTo("Заказа с таким id не существует"))
+        responseFiveth.then().assertThat().statusCode(404)
                 .and()
-                .statusCode(404);
+                .body("message",equalTo("Заказа с таким id не существует"));
 
     }
 }

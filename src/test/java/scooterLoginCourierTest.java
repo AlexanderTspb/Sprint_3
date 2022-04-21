@@ -41,9 +41,9 @@ public class scooterLoginCourierTest {
         //отправляем запрос на логин созданного курьера
         Response responseLogin =  courierClient.login(LoginRequestBody.from(courier));
 
-        responseLogin.then().assertThat().body("id", notNullValue())
-                        .and()
-        .statusCode(200);
+        responseLogin.then().assertThat().statusCode(200)
+                .and()
+                .body("id", notNullValue());
 
     }
 
@@ -56,9 +56,9 @@ public class scooterLoginCourierTest {
 
         Response responseSecond =  courierClient.loginWithoutLogin(courier);
 
-        responseSecond.then().assertThat().body("message",equalTo("Недостаточно данных для входа"))
+        responseSecond.then().assertThat().statusCode(400)
                 .and()
-                .statusCode(400);
+                .body("message",equalTo("Недостаточно данных для входа"));
 
     }
 
@@ -71,9 +71,9 @@ public class scooterLoginCourierTest {
 
         Response responseSecond = courierClient.loginWithoutPassword(courier);
 
-        responseSecond.then().assertThat().body("message",equalTo("Недостаточно данных для входа"))
+        responseSecond.then().assertThat().statusCode(400)
                 .and()
-                .statusCode(400);
+                .body("message",equalTo("Недостаточно данных для входа"));
 
     }
 
@@ -86,9 +86,9 @@ public class scooterLoginCourierTest {
 
         Response responseSecond = courierClient.loginWithUncorrectLogin(courier);
 
-        responseSecond.then().assertThat().body("message",equalTo("Учетная запись не найдена"))
+        responseSecond.then().assertThat().statusCode(404)
                 .and()
-                .statusCode(404);
+                .body("message",equalTo("Учетная запись не найдена"));
 
     }
 
