@@ -1,18 +1,14 @@
-// импортируем RestAssured
-// импортируем Response
 
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-
 import static io.restassured.RestAssured.given;
-
 import static org.hamcrest.Matchers.equalTo;
 
 import static io.restassured.RestAssured.*;
@@ -21,10 +17,16 @@ import static org.hamcrest.Matchers.notNullValue;
 public class scooterRegisterCourierTest {
 
     private CourierClient courierClient;
+    private Courier courier;
 
     @Before
     public void setUp() {
         courierClient = new CourierClient();
+    }
+
+    @After
+    public void tearDown() {
+        System.out.println("Конец теста");
     }
 
     @Test
@@ -32,15 +34,74 @@ public class scooterRegisterCourierTest {
     @DisplayName("Создание курьера c корректными параметрами")
     public void registerCourierWhenCorrectParametersTest(){
 
-        Courier courier = Courier.getRandom();
+        courier = Courier.getRandom();
 
         // отправляем запрос на регистрацию курьера и сохраняем ответ в переменную response класса Response
         Response response =  courierClient.create(courier);
         response.then().assertThat().body("ok",equalTo(true))
                         .and()
         .statusCode(201);
+        courierClient.deleteS(courier);
+    }
 
-       courierClient.deleteS(courier);
+    //2тест
+
+    @Test
+    @Description("Создание курьера c уже существующим логином")
+    @DisplayName("Создание курьера с подстановкой существующего login")
+    public void registerCourierWithExistingLoginTest(){
+
+        courier = Courier.getRandom();
+
+        // отправляем запрос на регистрацию курьера и сохраняем ответ в переменную response класса Response
+        Response response =  courierClient.create(courier);
+        Response responseSecond =  courierClient.create(courier);
+        responseSecond.then().assertThat().body("message",equalTo("Этот логин уже используется. Попробуйте другой."))
+                .and()
+                .statusCode(409);
+        courierClient.deleteS(courier);
+
+    }
+
+    // 3 тест
+
+    @Test
+    @Description("Создание курьера без имени")
+    @DisplayName("Создание курьера без подстановки firstName")
+    public void registerCourierWithoutFirstNameTest(){
+
+        Response response = courierClient.createCourierWithoutFirstName();
+        response.then().assertThat().body("ok",equalTo(true))
+                .and()
+                .statusCode(201);
+
+    }
+
+    // 4 тест
+
+    @Test
+    @Description("Создание курьера без логина")
+    @DisplayName("Создание курьера без подстановки login")
+    public void registerCourierWithoutLoginTest(){
+
+        Response response = courierClient.createCourierWithoutLogin();
+        response.then().assertThat().body("message",equalTo("Недостаточно данных для создания учетной записи"))
+                .and()
+                .statusCode(400);
+
+    }
+
+    // 5 тест
+
+    @Test
+    @Description("Создание курьера без пароля")
+    @DisplayName("Создание курьера без подстановки password")
+    public void registerCourierWithoutPasswordTest(){
+
+        Response response = courierClient.createCourierWithoutPassword();
+        response.then().assertThat().body("message",equalTo("Недостаточно данных для создания учетной записи"))
+                .and()
+                .statusCode(400);
 
     }
 

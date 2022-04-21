@@ -1,11 +1,10 @@
-// импортируем RestAssured
-// импортируем Response
 
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,6 +20,11 @@ public class scooterDeleteCourierTest {
         courierClient = new CourierClient();
     }
 
+    @After
+    public void tearDown() {
+        System.out.println("Конец теста");
+    }
+
     @Test
     @Description("Удаление курьера")
     @DisplayName("Удаление курьера с корректными параметрами")
@@ -34,6 +38,42 @@ public class scooterDeleteCourierTest {
         responseDelete.then().assertThat().body("ok", equalTo(true)).
                 and()
                 .statusCode(200);
+    }
+
+    //2тест
+
+    @Test
+    @Description("Удаление курьера без идентификатора курьера")
+    @DisplayName("Удаление курьера без подстановки courierId")
+    public void deleteCourierWithoutCourierIdTest(){
+
+        // удаление созданного курьера
+        Response responseDelete = courierClient.deleteWithoutId();
+
+        responseDelete.then().assertThat().body("message", equalTo("Not Found.")).
+                and()
+                .statusCode(404);
+
+    }
+
+    //3 тест
+
+    @Test
+    @Description("Удаление курьера c несуществующим идентификатором курьера")
+    @DisplayName("Удаление курьера c подстановкой несуществующего courierId")
+    public void deleteCourierWhenUncorrectParametersTest(){
+
+        String courierId = RandomStringUtils.randomNumeric(7);
+        System.out.println("несуществующий идентификатор курьера " + courierId);
+
+        // удаление созданного курьера
+
+        Response responseDelete = courierClient.deleteWithUncorrectId(courierId);
+
+        responseDelete.then().assertThat().body("message", equalTo("Курьера с таким id нет.")).
+                and()
+                .statusCode(404);
+
     }
 
 }

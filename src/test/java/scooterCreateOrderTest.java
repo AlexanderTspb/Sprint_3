@@ -1,5 +1,3 @@
-// импортируем RestAssured
-// импортируем Response
 
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
